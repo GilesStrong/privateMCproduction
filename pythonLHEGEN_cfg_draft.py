@@ -105,7 +105,7 @@ process.generator = cms.EDFilter("Pythia8HadronizerFilter",
                                 )  
 
 process.externalLHEProducer = cms.EDProducer("ExternalLHEProducer",
-    nEvents = cms.untracked.uint32('#NUMBEREVENTS#'),
+    nEvents = cms.untracked.uint32(#NUMBEREVENTS#),
     outputFile = cms.string('cmsgrid_final.lhe'),
     scriptName = cms.FileInPath('GeneratorInterface/LHEInterface/data/run_generic_tarball_cvmfs.sh'),
     numberOfParameters = cms.uint32(1),
