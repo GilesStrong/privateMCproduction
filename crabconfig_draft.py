@@ -22,8 +22,7 @@ config.Data.outputDatasetTag = 'eventLHEGEN-#BASENAME#-#REQUESTDATE#'
 config.Data.outLFNDirBase = '/store/group/phys_higgs'
 
 config.section_("Site")
-#config.Site.storageSite = 'T2_DE_DESY'
-config.Site.storageSite = 'T2_CN_Beijing'
+config.Site.storageSite = 'T2_PT_NCG_Lisbon'
 config.Site.whitelist = ['T2_*']
 
 config.section_("User")

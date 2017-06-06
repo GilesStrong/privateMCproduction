@@ -4,6 +4,9 @@
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
 # with command line options: Configuration/GenProduction/python/pythonLHEGEN.py --fileout file:eventLHEGEN-output.root --mc --eventcontent RAWSIM,LHE --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1,Configuration/DataProcessing/Utils.addMonitoring --datatier GEN-SIM,LHE --conditions MCRUN2_71_V1::All --beamspot Realistic50ns13TeVCollision --step LHE,GEN,SIM --magField 38T_PostLS1 --python_filename pythonLHEGEN_cfg.py --no_exec -n 100
 import FWCore.ParameterSet.Config as cms
+from Configuration.Generator.Pythia8CommonSettings_cfi import *
+from Configuration.Generator.Pythia8CUEP8M1Settings_cfi import *
+from Configuration.Generator.Pythia8PowhegEmissionVetoSettings_cfi import *
 
 process = cms.Process('SIM')
 
@@ -76,48 +79,33 @@ from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, 'MCRUN2_71_V1::All', '')
 
 process.generator = cms.EDFilter("Pythia8HadronizerFilter",
-    pythiaPylistVerbosity = cms.untracked.int32(1),
-    filterEfficiency = cms.untracked.double(1.0),
-    pythiaHepMCVerbosity = cms.untracked.bool(False),
-    comEnergy = cms.double(13000.0),
-    maxEventsToPrint = cms.untracked.int32(1),
-    PythiaParameters = cms.PSet(
-        pythia8CommonSettings = cms.vstring('Tune:preferLHAPDF = 2', 
-            'Main:timesAllowErrors = 10000', 
-            'Check:epTolErr = 0.01', 
-            'Beams:setProductionScalesFromLHEF = off', 
-            'SLHA:keepSM = on', 
-            'SLHA:minMassSM = 1000.', 
-            'ParticleDecays:limitTau0 = on', 
-            'ParticleDecays:tau0Max = 10', 
-            'ParticleDecays:allowPhotonRadiation = on'),
-        pythia8PowhegEmissionVetoSettings = cms.vstring('POWHEG:veto = 1', 
-            'POWHEG:pTdef = 1', 
-            'POWHEG:emitted = 0', 
-            'POWHEG:pTemt = 0', 
-            'POWHEG:pThard = 0', 
-            'POWHEG:vetoCount = 100', 
-            'SpaceShower:pTmaxMatch = 2', 
-            'TimeShower:pTmaxMatch = 2'),
-        processParameters = cms.vstring('POWHEG:nFinal = 2', 
-            'TimeShower:mMaxGamma = 1.0', 
-            'Tune:pp 14', 
-            'Tune:ee 7', 
-            'MultipartonInteractions:ecmPow=0.25208', 
-            'SpaceShower:alphaSvalue=0.1108', 
-            'PDF:pSet=LHAPDF6:NNPDF30_lo_as_0130', 
-            'MultipartonInteractions:pT0Ref=2.034340e+00', 
-            'MultipartonInteractions:expPow=1.932600e+00', 
-            'ColourReconnection:range=5.706919e+00'),
-        parameterSets = cms.vstring('pythia8CommonSettings', 
-            'pythia8PowhegEmissionVetoSettings', 
-            'processParameters')
-    )
-)
-
+                                maxEventsToPrint = cms.untracked.int32(1),
+                                pythiaPylistVerbosity = cms.untracked.int32(1),
+                                filterEfficiency = cms.untracked.double(1.0),
+                                pythiaHepMCVerbosity = cms.untracked.bool(False),
+                                comEnergy = cms.double(13000.),
+                                PythiaParameters = cms.PSet(
+                                                            pythia8CommonSettingsBlock,
+                                                            pythia8CUEP8M1SettingsBlock,
+                                                            processParameters = cms.vstring(
+                                                                                            '25:m0 = 125.0',
+                                                                                            '25:onMode = off',
+                                                                                            '25:onIfMatch = 5 -5',
+                                                                                            '25:onIfMatch = 22 22'
+                                                                                            'ResonanceDecayFilter:filter = on',
+                                                                                            'ResonanceDecayFilter:exclusive = on', #off: require at least the specified number of daughters, on: require exactly the specified number of daughters
+                                                                                            'ResonanceDecayFilter:mothers = 25', #list of mothers not specified -> count all particles in hard process+resonance decays (better to avoid specifying mothers when including leptons from the lhe in counting, since intermediate resonances are not gauranteed to appear in general
+                                                                                            'ResonanceDecayFilter:daughters = 5,5,15,15',
+                                                                                            ),
+                                                            parameterSets = cms.vstring('pythia8CommonSettings',
+                                                                                        'pythia8CUEP8M1Settings',
+                                                                                        'processParameters'
+                                                                                        )
+                                                            )
+                                )  
 
 process.externalLHEProducer = cms.EDProducer("ExternalLHEProducer",
-    nEvents = cms.untracked.uint32(#NUMBEREVENTS#),
+    nEvents = cms.untracked.uint32('#NUMBEREVENTS#'),
     outputFile = cms.string('cmsgrid_final.lhe'),
     scriptName = cms.FileInPath('GeneratorInterface/LHEInterface/data/run_generic_tarball_cvmfs.sh'),
     numberOfParameters = cms.uint32(1),

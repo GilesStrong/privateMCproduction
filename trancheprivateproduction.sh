@@ -1,15 +1,14 @@
 #!/bin/bash
 
 # Define number of events
-export NUMBEREVENTS=380000
+export NUMBEREVENTS=10
 
 # Define workdir
 export WORKDIR=`pwd`
 
 # Define gridpack location, warning if you are using crab, requires global accessible gridpack
 # If running locally you can also set a local gridpack location
-export GRIDPACKLOC=/afs/cern.ch/work/m/mharrend/public/ttHtranche3/TTToSemiLepton_hvq_ttHtranche3.tgz
-# export GRIDPACKLOC=/afs/cern.ch/work/m/mharrend/public/ttHtranche3/TTTo2L2Nu_hvq_ttHtranche3.tgz
+export GRIDPACKLOC=/cvmfs/cms.cern.ch/phys_generator/gridpacks/slc6_amd64_gcc481/13TeV/madgraph/V5_2.3.3/GF_HH_node_SM/v1/GF_HH_node_SM_tarball.tar.xz
 
 # Use crab for grid submitting, adjust crabconfig.py accordingly beforehand
 export USECRAB="True"
@@ -31,10 +30,10 @@ echo "Changed into workdir"
 
 echo "Install CMSSW in workdir"
 source /cvmfs/cms.cern.ch/cmsset_default.sh 
-scram project CMSSW_7_1_25
-cd CMSSW_7_1_25/src
+scram project CMSSW_8_0_10
+cd CMSSW_8_0_10/src
 eval `scramv1 runtime -sh`
-echo "Loaded CMSSW_7_1_25"
+echo "Loaded CMSSW_8_0_10"
 
 echo "Copy run script to workdir"
 mkdir -p GeneratorInterface/LHEInterface/data/
