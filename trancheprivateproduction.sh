@@ -30,10 +30,10 @@ echo "Changed into workdir"
 
 echo "Install CMSSW in workdir"
 source /cvmfs/cms.cern.ch/cmsset_default.sh 
-scram project CMSSW_8_0_10
-cd CMSSW_8_0_10/src
+scram project CMSSW_8_0_24
+cd CMSSW_8_0_24/src
 eval `scramv1 runtime -sh`
-echo "Loaded CMSSW_8_0_10"
+echo "Loaded CMSSW_8_0_24"
 
 echo "Copy run script to workdir"
 mkdir -p GeneratorInterface/LHEInterface/data/
