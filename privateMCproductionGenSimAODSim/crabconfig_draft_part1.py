@@ -28,7 +28,7 @@ config.Data.outputDatasetTag = 'eventAODSIMMiniAOD-#BASENAME#'
 config.Data.inputDBS = 'phys03'
 ## T3 Beijing
 config.Data.ignoreLocality = True
-config.Data.outLFNDirBase = '/store/user/gstrong'
+config.Data.outLFNDirBase = '/store/group/phys_higgs'
 ## T3 Beijing
 #config.Data.userInputFiles =[
 config.Data.inputDataset = ('
