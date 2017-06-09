@@ -5,7 +5,7 @@ config.section_("Site")
 #config.Site.storageSite = 'T2_DE_DESY'
 #config.Site.whitelist = ['T2_DE_DESY']
 ## T3 Beijing
-config.Site.storageSite = 'T2_CN_Beijing'
+config.Site.storageSite = 'T2_PT_NCG_Lisbon'
 config.Site.whitelist = ['T2_*']
 ## T3 Beijing
 
