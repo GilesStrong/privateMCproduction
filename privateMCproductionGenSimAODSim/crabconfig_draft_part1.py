@@ -24,7 +24,7 @@ config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 1
 #config.Data.totalUnits = #NUMBEREVENTS#
 config.Data.publication = True
-config.Data.outputDatasetTag = 'eventAODSIMMiniAOD-#BASENAME#'
+config.Data.outputDatasetTag =  'eventAODSIMMiniAOD-#GF_SM_HH#'#'eventAODSIMMiniAOD-#BASENAME#'
 config.Data.inputDBS = 'phys03'
 ## T3 Beijing
 config.Data.ignoreLocality = True
