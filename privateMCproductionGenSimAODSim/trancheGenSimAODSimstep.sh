@@ -8,7 +8,7 @@ export WORKDIR=`pwd`
 # Define location of GenSim samples, warning make sure that you run only one time on the same folder since otherwise we will produce two times the events.
 # You will get an error message if you try to reuse some of the input files, so please make sure that you start this production only after all GenSim events are produced.
 # Furthermore, you have to give an absolute path name
-export GENSIMLOC=/privateMCProductionLHEGEN/gstrong-eventLHEGEN-GF_SM_HH-2017061413061497438382-5cd06b906f71a33defdbebf1ee7ea28f/USER
+export GENSIMLOC=/privateMCProductionLHEGEN/gstrong-eventLHEGEN-GF_SM_HH-2017062015061497964958-5cd06b906f71a33defdbebf1ee7ea28f/USER
 
 
 # Use crab for grid submitting, adjust crabconfig.py accordingly beforehand
