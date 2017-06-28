@@ -2,7 +2,7 @@
 # using: 
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
-# with command line options: step1 --filein dbs:/ZPrimeToEMu_M_800_TuneCUETP8M1_13TeV_pythia8/RunIISummer16DR80Premix-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/AODSIM --fileout file:EXO-RunIISummer16MiniAODv2-00003.root --mc --eventcontent MINIAODSIM --runUnscheduled --datatier MINIAODSIM --conditions 80X_mcRun2_asymptotic_2016_TrancheIV_v6 --step PAT --nThreads 1 --era Run2_2016 --python_filename EXO-RunIISummer16MiniAODv2-00003_1_cfg.py --no_exec --customise Configuration/DataProcessing/Utils.addMonitoring -n 10
+# with command line options: step1 --fileout file:HIG-RunIISummer16MiniAODv2-00337.root --mc --eventcontent MINIAODSIM --runUnscheduled --datatier MINIAODSIM --conditions 80X_mcRun2_asymptotic_2016_TrancheIV_v6 --step PAT --nThreads 4 --era Run2_2016 --python_filename HIG-RunIISummer16MiniAODv2-00337_1_cfg.py --no_exec --customise Configuration/DataProcessing/Utils.addMonitoring -n 2880
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.StandardSequences.Eras import eras
