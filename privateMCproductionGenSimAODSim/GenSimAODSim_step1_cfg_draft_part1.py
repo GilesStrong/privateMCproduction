@@ -2,7 +2,7 @@
 # using: 
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
-# with command line options: step1 --filein /store/XX --fileout file:GenSimAODSim_step1.root --pileup_input dbs:/Neutrino_E-10_gun/RunIISpring15PrePremix-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v2-v2/GEN-SIM-DIGI-RAW --mc --eventcontent PREMIXRAW --datatier GEN-SIM-RAW --conditions 80X_mcRun2_asymptotic_2016_TrancheIV_v6 --step DIGIPREMIX_S2,DATAMIX,L1,DIGI2RAW,HLT:@frozen2016 --nThreads 4 --datamix PreMix --era Run2_2016 --python_filename EXO-RunIISummer16DR80Premix-00004_1_cfg.py --no_exec --customise Configuration/DataProcessing/Utils.addMonitoring -n 82
+# with command line options: step1 --filein dbs:/GluGluToHHTo2B2Tau_node_SM_13TeV-madgraph/RunIISummer15GS-MCRUN2_71_V1-v1/GEN-SIM --fileout file:HIG-RunIISummer16DR80Premix-00881_step1.root --pileup_input dbs:/Neutrino_E-10_gun/RunIISpring15PrePremix-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v2-v2/GEN-SIM-DIGI-RAW --mc --eventcontent PREMIXRAW --datatier GEN-SIM-RAW --conditions 80X_mcRun2_asymptotic_2016_TrancheIV_v6 --step DIGIPREMIX_S2,DATAMIX,L1,DIGI2RAW,HLT:@frozen2016 --nThreads 4 --datamix PreMix --era Run2_2016 --python_filename HIG-RunIISummer16DR80Premix-00881_1_cfg.py --no_exec --customise Configuration/DataProcessing/Utils.addMonitoring -n 84
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.StandardSequences.Eras import eras
@@ -27,10 +27,9 @@ process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(#NUMBEREVENTS#)
+    input = cms.untracked.int32(84)
 )
 
 # Input source
-# MAH: Uses tuple to have more than 255 input files
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(*("

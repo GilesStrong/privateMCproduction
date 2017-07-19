@@ -2,7 +2,7 @@
 # using: 
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
-# with command line options: step2 --filein file:EXO-RunIISummer16DR80Premix-00004_step1.root --fileout file:EXO-RunIISummer16DR80Premix-00004.root --mc --eventcontent AODSIM --runUnscheduled --datatier AODSIM --conditions 80X_mcRun2_asymptotic_2016_TrancheIV_v6 --step RAW2DIGI,RECO,EI --nThreads 4 --era Run2_2016 --python_filename EXO-RunIISummer16DR80Premix-00004_2_cfg.py --no_exec --customise Configuration/DataProcessing/Utils.addMonitoring -n 960
+# with command line options: step2 --filein file:HIG-RunIISummer16DR80Premix-00881_step1.root --fileout file:HIG-RunIISummer16DR80Premix-00881.root --mc --eventcontent AODSIM --runUnscheduled --datatier AODSIM --conditions 80X_mcRun2_asymptotic_2016_TrancheIV_v6 --step RAW2DIGI,RECO,EI --nThreads 1 --era Run2_2016 --python_filename HIG-RunIISummer16DR80Premix-00881_2_cfg.py --no_exec --customise Configuration/DataProcessing/Utils.addMonitoring -n 960
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.StandardSequences.Eras import eras
@@ -73,10 +73,6 @@ process.AODSIMoutput_step = cms.EndPath(process.AODSIMoutput)
 
 # Schedule definition
 process.schedule = cms.Schedule(process.raw2digi_step,process.reconstruction_step,process.eventinterpretaion_step,process.endjob_step,process.AODSIMoutput_step)
-
-#Setup FWK for multithreaded
-process.options.numberOfThreads=cms.untracked.uint32(1)
-process.options.numberOfStreams=cms.untracked.uint32(0)
 
 # customisation of the process.
 

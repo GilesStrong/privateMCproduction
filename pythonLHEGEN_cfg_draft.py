@@ -40,7 +40,7 @@ process.options = cms.untracked.PSet(
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
     version = cms.untracked.string('$Revision: 1.19 $'),
-    annotation = cms.untracked.string('Configuration/GenProduction/python/pythonLHEGEN.py nevts:100'),
+    annotation = cms.untracked.string('Configuration/GenProduction/python/ThirteenTeV/Hadronizer_TuneCUETP8M1_13TeV_generic_LHE_pythia8_cff.py nevts:100'),
     name = cms.untracked.string('Applications')
 )
 
@@ -79,30 +79,30 @@ from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, 'MCRUN2_71_V1::All', '')
 
 process.generator = cms.EDFilter("Pythia8HadronizerFilter",
-                                maxEventsToPrint = cms.untracked.int32(1),
-                                pythiaPylistVerbosity = cms.untracked.int32(1),
-                                filterEfficiency = cms.untracked.double(1.0),
-                                pythiaHepMCVerbosity = cms.untracked.bool(False),
-                                comEnergy = cms.double(13000.),
-                                PythiaParameters = cms.PSet(
-                                                            pythia8CommonSettingsBlock,
-                                                            pythia8CUEP8M1SettingsBlock,
-                                                            processParameters = cms.vstring(
-                                                                                            '25:m0 = 125.0',
-                                                                                            '25:onMode = off',
-                                                                                            '25:onIfMatch = 5 -5',
-                                                                                            '25:onIfMatch = 22 22'
-                                                                                            'ResonanceDecayFilter:filter = on',
-                                                                                            'ResonanceDecayFilter:exclusive = on', #off: require at least the specified number of daughters, on: require exactly the specified number of daughters
-                                                                                            'ResonanceDecayFilter:mothers = 25', #list of mothers not specified -> count all particles in hard process+resonance decays (better to avoid specifying mothers when including leptons from the lhe in counting, since intermediate resonances are not gauranteed to appear in general
-                                                                                            'ResonanceDecayFilter:daughters = 5,5,15,15',
-                                                                                            ),
-                                                            parameterSets = cms.vstring('pythia8CommonSettings',
-                                                                                        'pythia8CUEP8M1Settings',
-                                                                                        'processParameters'
-                                                                                        )
-                                                            )
-                                )  
+    pythiaPylistVerbosity = cms.untracked.int32(1),
+    filterEfficiency = cms.untracked.double(1.0),
+    pythiaHepMCVerbosity = cms.untracked.bool(False),
+    comEnergy = cms.double(13000.0),
+    maxEventsToPrint = cms.untracked.int32(1),
+    PythiaParameters = cms.PSet(
+        pythia8CommonSettings = cms.vstring('Tune:preferLHAPDF = 2', 
+            'Main:timesAllowErrors = 10000', 
+            'Check:epTolErr = 0.01', 
+            'Beams:setProductionScalesFromLHEF = off', 
+            'SLHA:keepSM = on', 
+            'SLHA:minMassSM = 1000.', 
+            'ParticleDecays:limitTau0 = on', 
+            'ParticleDecays:tau0Max = 10', 
+            'ParticleDecays:allowPhotonRadiation = on'),
+        pythia8CUEP8M1Settings = cms.vstring('Tune:pp 14', 
+            'Tune:ee 7', 
+            'MultipartonInteractions:pT0Ref=2.4024', 
+            'MultipartonInteractions:ecmPow=0.25208', 
+            'MultipartonInteractions:expPow=1.6'),
+        parameterSets = cms.vstring('pythia8CommonSettings', 
+            'pythia8CUEP8M1Settings')
+    )
+) 
 
 process.externalLHEProducer = cms.EDProducer("ExternalLHEProducer",
     nEvents = cms.untracked.uint32(#NUMBEREVENTS#),
