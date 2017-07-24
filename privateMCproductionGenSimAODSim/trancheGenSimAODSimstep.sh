@@ -83,8 +83,8 @@ if [ $USECRAB = "True" ]; then
 	sed -e "s/#REQUESTDATE#/`date  +'%Y%m%d%H%m%s'`/g" ./crabconfig_eventsInserted.py > ./crabconfig_dateInserted.py
 	sed -e "s/#WHOAMI#/`whoami`/g" ./crabconfig_dateInserted.py > ./crabconfig_UserInserted.py
 
-	export BASENAMEREPLACEFULL=`echo $GENSIMLOC | grep -o 'eventLHEGEN-[A-Za-z_0-9]*'`
-	export BASENAMEREPLACE=${BASENAMEREPLACEFULL:13}
+	export BASENAMEREPLACEFULL=eventAODSIMMiniAOD-GF_SM_HH #`echo $GENSIMLOC | grep -o 'eventLHEGEN-[A-Za-z_0-9]*'`
+	export BASENAMEREPLACE=eventAODSIMMiniAOD-GF_SM_HH #${BASENAMEREPLACEFULL:13}
 	sed -e "s/#BASENAME#/${BASENAMEREPLACE}/g" ./crabconfig_UserInserted.py > ./crabconfig.py
 
 
