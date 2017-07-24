@@ -12,7 +12,7 @@ config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'GenSimAODSim_step1_cfg.py'
 config.JobType.disableAutomaticOutputCollection = True
 config.JobType.scriptExe = 'jobScript.sh'
-config.JobType.outputFiles = ['MiniAOD.root','GenSimAODSim_step1.log', 'GenSimAODSim_step2.log', 'FrameworkJobReport.xml', 'job.log']
+config.JobType.outputFiles = ['MiniAOD.root']#,'GenSimAODSim_step1.log', 'GenSimAODSim_step2.log', 'FrameworkJobReport.xml', 'job.log']
 config.JobType.inputFiles = ['jobScript.sh', 'GenSimAODSim_step1_cfg.py', 'GenSimAODSim_step2_cfg.py', 'GenSimAODSim_step3_cfg.py']
 config.JobType.maxMemoryMB = 2500
 
