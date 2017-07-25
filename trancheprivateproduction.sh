@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define number of events
-export NUMBEREVENTS=1000
+export NUMBEREVENTS=10000
 
 # Define workdir
 export WORKDIR=`pwd`
