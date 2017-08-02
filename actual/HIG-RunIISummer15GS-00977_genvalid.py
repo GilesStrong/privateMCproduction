@@ -2,10 +2,10 @@
 # using: 
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
-# with command line options: Configuration/GenProduction/python/ThirteenTeV/Higgs/HH/ResonanceDecayFilter_example_HHTo2B2T_madgraph_pythia8_cff.py --filein dbs:/GluGluToHHTo2B2Tau_node_SM_13TeV-madgraph/RunIIWinter15wmLHE-MCRUN2_71_V1-v1/LHE --fileout file:HIG-RunIISummer15GS-00977.root --mc --eventcontent RAWSIM --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1,Configuration/DataProcessing/Utils.addMonitoring --datatier GEN-SIM --conditions MCRUN2_71_V1::All --beamspot Realistic50ns13TeVCollision --step GEN,SIM --magField 38T_PostLS1 --python_filename HIG-RunIISummer15GS-00977_1_cfg.py --no_exec -n 36
+# with command line options: Configuration/GenProduction/python/ThirteenTeV/Higgs/HH/ResonanceDecayFilter_example_HHTo2B2T_madgraph_pythia8_cff.py --filein dbs:/GluGluToHHTo2B2Tau_node_SM_13TeV-madgraph/RunIIWinter15wmLHE-MCRUN2_71_V1-v1/LHE --fileout file:HIG-RunIISummer15GS-00977.root --mc --eventcontent DQM --datatier DQM --conditions MCRUN2_71_V1::All --beamspot Realistic50ns13TeVCollision --step GEN,VALIDATION:genvalid_all --magField 38T_PostLS1 --fileout file:HIG-RunIISummer15GS-00977_genvalid.root --mc -n 1000 --python_filename HIG-RunIISummer15GS-00977_genvalid.py --no_exec
 import FWCore.ParameterSet.Config as cms
 
-process = cms.Process('SIM')
+process = cms.Process('VALIDATION')
 
 # import of standard configurations
 process.load('Configuration.StandardSequences.Services_cff')
@@ -14,21 +14,26 @@ process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('Configuration.EventContent.EventContent_cff')
 process.load('SimGeneral.MixingModule.mixNoPU_cfi')
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
-process.load('Configuration.Geometry.GeometrySimDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_PostLS1_cff')
 process.load('Configuration.StandardSequences.Generator_cff')
 process.load('IOMC.EventVertexGenerators.VtxSmearedRealistic50ns13TeVCollision_cfi')
 process.load('GeneratorInterface.Core.genFilterSummary_cff')
-process.load('Configuration.StandardSequences.SimIdeal_cff')
+process.load('Configuration.StandardSequences.Validation_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(#NUMBEREVENTS#)
+    input = cms.untracked.int32(1000)
 )
 
 # Input source
-process.source = cms.Source("EmptySource")
+process.source = cms.Source("PoolSource",
+    secondaryFileNames = cms.untracked.vstring(),
+    fileNames = cms.untracked.vstring(),
+    inputCommands = cms.untracked.vstring('keep *', 
+        'drop LHEXMLStringProduct_*_*_*'),
+    dropDescendantsOfDroppedBranches = cms.untracked.bool(False)
+)
 
 process.options = cms.untracked.PSet(
 
@@ -37,34 +42,22 @@ process.options = cms.untracked.PSet(
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
     version = cms.untracked.string('$Revision: 1.19 $'),
-    annotation = cms.untracked.string('Configuration/GenProduction/python/ThirteenTeV/Higgs/HH/ResonanceDecayFilter_example_HHTo2B2T_madgraph_pythia8_cff.py nevts:36'),
+    annotation = cms.untracked.string('Configuration/GenProduction/python/ThirteenTeV/Higgs/HH/ResonanceDecayFilter_example_HHTo2B2T_madgraph_pythia8_cff.py nevts:1000'),
     name = cms.untracked.string('Applications')
 )
 
 # Output definition
 
-process.RAWSIMoutput = cms.OutputModule("PoolOutputModule",
+process.DQMoutput = cms.OutputModule("PoolOutputModule",
     splitLevel = cms.untracked.int32(0),
-    eventAutoFlushCompressedSize = cms.untracked.int32(5242880),
-    outputCommands = process.RAWSIMEventContent.outputCommands,
-    fileName = cms.untracked.string('file:eventLHEGEN-output.root'),
+    outputCommands = process.DQMEventContent.outputCommands,
+    fileName = cms.untracked.string('file:HIG-RunIISummer15GS-00977_genvalid.root'),
     dataset = cms.untracked.PSet(
         filterName = cms.untracked.string(''),
-        dataTier = cms.untracked.string('GEN-SIM')
+        dataTier = cms.untracked.string('DQM')
     ),
     SelectEvents = cms.untracked.PSet(
         SelectEvents = cms.vstring('generation_step')
-    )
-)
-
-process.LHEoutput = cms.OutputModule("PoolOutputModule",
-    splitLevel = cms.untracked.int32(0),
-    eventAutoFlushCompressedSize = cms.untracked.int32(5242880),
-    outputCommands = process.LHEEventContent.outputCommands,
-    fileName = cms.untracked.string('file:eventLHEGEN-output_inLHE.root'),
-    dataset = cms.untracked.PSet(
-        filterName = cms.untracked.string(''),
-        dataTier = cms.untracked.string('LHE')
     )
 )
 
@@ -72,6 +65,9 @@ process.LHEoutput = cms.OutputModule("PoolOutputModule",
 
 # Other statements
 process.genstepfilter.triggerConditions=cms.vstring("generation_step")
+process.mix.playback = True
+process.mix.digitizers = cms.PSet()
+for a in process.aliases: delattr(process, a)
 from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, 'MCRUN2_71_V1::All', '')
 
@@ -110,52 +106,28 @@ process.generator = cms.EDFilter("Pythia8HadronizerFilter",
     )
 )
 
-process.externalLHEProducer = cms.EDProducer("ExternalLHEProducer",
-    nEvents = cms.untracked.uint32(#NUMBEREVENTS#),
-    outputFile = cms.string('cmsgrid_final.lhe'),
-    scriptName = cms.FileInPath('GeneratorInterface/LHEInterface/data/run_generic_tarball_cvmfs.sh'),
-    numberOfParameters = cms.uint32(1),
-    args = cms.vstring('#GRIDPACKLOCATION#')
-)
-
 
 process.ProductionFilterSequence = cms.Sequence(process.generator)
 
-# Set different random numbers seeds every time one runs cmsRun
-from IOMC.RandomEngine.RandomServiceHelper import RandomNumberServiceHelper
-randSvc = RandomNumberServiceHelper(process.RandomNumberGeneratorService)
-randSvc.populate()
-
-
 # Path and EndPath definitions
-process.lhe_step = cms.Path(process.externalLHEProducer)
 process.generation_step = cms.Path(process.pgen)
-process.simulation_step = cms.Path(process.psim)
 process.genfiltersummary_step = cms.EndPath(process.genFilterSummary)
+process.validation_step = cms.EndPath(process.genstepfilter+process.genvalid_all)
 process.endjob_step = cms.EndPath(process.endOfProcess)
-process.RAWSIMoutput_step = cms.EndPath(process.RAWSIMoutput)
-process.LHEoutput_step = cms.EndPath(process.LHEoutput)
+process.DQMoutput_step = cms.EndPath(process.DQMoutput)
 
 # Schedule definition
-#process.schedule = cms.Schedule(process.lhe_step,process.generation_step,process.genfiltersummary_step,process.simulation_step,process.endjob_step,process.RAWSIMoutput_step,process.LHEoutput_step)
-process.schedule = cms.Schedule(process.lhe_step,process.generation_step,process.genfiltersummary_step,process.simulation_step,process.endjob_step,process.RAWSIMoutput_step)
+process.schedule = cms.Schedule(process.generation_step,process.genfiltersummary_step,process.validation_step,process.endjob_step,process.DQMoutput_step)
 # filter all path with the production filter sequence
 for path in process.paths:
-	if path in ['lhe_step']: continue
 	getattr(process,path)._seq = process.ProductionFilterSequence * getattr(process,path)._seq 
 
 # customisation of the process.
 
-# Automatic addition of the customisation function from Configuration.DataProcessing.Utils
-from Configuration.DataProcessing.Utils import addMonitoring 
+# Automatic addition of the customisation function from SimGeneral.MixingModule.fullMixCustomize_cff
+from SimGeneral.MixingModule.fullMixCustomize_cff import setCrossingFrameOn 
 
-#call to customisation function addMonitoring imported from Configuration.DataProcessing.Utils
-process = addMonitoring(process)
-
-# Automatic addition of the customisation function from SLHCUpgradeSimulations.Configuration.postLS1Customs
-from SLHCUpgradeSimulations.Configuration.postLS1Customs import customisePostLS1 
-
-#call to customisation function customisePostLS1 imported from SLHCUpgradeSimulations.Configuration.postLS1Customs
-process = customisePostLS1(process)
+#call to customisation function setCrossingFrameOn imported from SimGeneral.MixingModule.fullMixCustomize_cff
+process = setCrossingFrameOn(process)
 
 # End of customisation functions
